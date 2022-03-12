@@ -1,0 +1,86 @@
+html {
+  font-size: 62.5%;
+}
+
+* {
+  outline: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.game {
+  max-width: 50rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.title {
+  background-color: #f5f5dc;
+  font-weight: bold;
+  text-align: center;
+  font-size: 5rem;
+}
+
+.metainfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background-color: #6beee5;
+  font-size: 4rem;
+  font-weight: bold;
+  padding: 1rem;
+}
+
+.progress {
+  height: 1rem;
+  width: 20%;
+  background-color: #f00;
+}
+
+.question {
+  text-align: center;
+}
+
+.question .content {
+  background: #c3d6ee;
+  font-size: 7rem;
+  padding: 7rem 0;
+}
+
+.question .answer {
+  background-color: #eec68f;
+  font-weight: bold;
+  font-size: 7rem;
+  padding: 2rem 0;
+}
+
+.response {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: #ffe4c5;
+  padding: 3rem 0;
+}
+
+.btn {
+  width: 10rem;
+  height: 10rem;
+  font-size: 5rem;
+  border: 3px solid#a5a4ad;
+}
+
+.btn:active {
+  background-color: #c3d6ee;
+}
+
+.btn-agree {
+  color: #008000;
+}
+
+.btn-disagree {
+  color: #f00;
+}
