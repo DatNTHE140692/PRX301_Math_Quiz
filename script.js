@@ -42,15 +42,15 @@ const generateEquation = () => {
     switch (operator) {
         case '+':
             result = firstNumber + secondNumer;
-            answer = getRandomNumber(0, MAX_EXCLUSIVE_NUMBER + MAX_EXCLUSIVE_NUMBER);
+            answer = 0 === Date.now() % 2 ? result : getRandomNumber(0, MAX_EXCLUSIVE_NUMBER + MAX_EXCLUSIVE_NUMBER);
             break;
         case '-':
             result = firstNumber - secondNumer;
-            answer = getRandomNumber(MAX_EXCLUSIVE_NUMBER * (-1), MAX_EXCLUSIVE_NUMBER);
+            answer = 0 === Date.now() % 2 ? result : getRandomNumber(MAX_EXCLUSIVE_NUMBER * (-1), MAX_EXCLUSIVE_NUMBER);
             break;
         case '*':
             result = firstNumber * secondNumer;
-            answer = getRandomNumber(0, MAX_EXCLUSIVE_NUMBER * MAX_EXCLUSIVE_NUMBER);
+            answer = 0 === Date.now() % 2 ? result : getRandomNumber(0, MAX_EXCLUSIVE_NUMBER * MAX_EXCLUSIVE_NUMBER);
             break;
         default:
             break;
