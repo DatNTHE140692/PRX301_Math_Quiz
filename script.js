@@ -14,10 +14,11 @@ const setProgress = (percent) => progressEl.style.width = `${percent}%`;
 // Game info
 const INIT_LEVEL = 1;
 const INIT_SCORE = 0;
-const INIT_PROGRESS = 20;
+const INIT_PROGRESS = 0;
 const LEVEL_STEP = 1;
 const SCORE_STEP = 5;
-const PROGRESS_STEP = 20;
+const TOTAL_SECONDS = 30;
+const PROGRESS_STEP = 100 / TOTAL_SECONDS;
 const MAX_EXCLUSIVE_NUMBER = 1000;
 const OPERATORS = ['+', '-', '*'];
 const RESULTS = [true, false];
@@ -32,6 +33,21 @@ let operator;
 let result;
 let answer;
 let userChoice;
+let interval;
+
+const countDown = () => {
+    interval = setInterval(() => {
+        progress += PROGRESS_STEP;
+        setProgress(progress);
+        if (100 < progress) doWhenIncorrect();
+    }, 1000)
+}
+
+const resetCountDown = () => {
+    progress = 0;
+    setProgress(progress);
+    clearInterval(interval);
+}
 
 const getRandomNumber = (min, max) => Math.floor(Math.random() * (max - min) + min);
 
@@ -39,27 +55,15 @@ const generateEquation = () => {
     firstNumber = getRandomNumber(0, MAX_EXCLUSIVE_NUMBER);
     secondNumer = getRandomNumber(0, MAX_EXCLUSIVE_NUMBER);
     operator = OPERATORS[getRandomNumber(0, OPERATORS.length)];
-    switch (operator) {
-        case '+':
-            result = firstNumber + secondNumer;
-            answer = 0 === Date.now() % 2 ? result : getRandomNumber(0, MAX_EXCLUSIVE_NUMBER + MAX_EXCLUSIVE_NUMBER);
-            break;
-        case '-':
-            result = firstNumber - secondNumer;
-            answer = 0 === Date.now() % 2 ? result : getRandomNumber(MAX_EXCLUSIVE_NUMBER * (-1), MAX_EXCLUSIVE_NUMBER);
-            break;
-        case '*':
-            result = firstNumber * secondNumer;
-            answer = 0 === Date.now() % 2 ? result : getRandomNumber(0, MAX_EXCLUSIVE_NUMBER * MAX_EXCLUSIVE_NUMBER);
-            break;
-        default:
-            break;
-    }
-    qsContentEl.innerText = `${firstNumber} ${operator} ${secondNumer}`;
+    const equation = `${firstNumber} ${operator} ${secondNumer}`;
+    result = eval(equation);
+    answer = RESULTS[getRandomNumber(0, RESULTS.length)] ? result : result + getRandomNumber(-10, 10);
+    qsContentEl.innerText = equation;
     qsAnswerEl.innerText = answer;
 }
 
 const reset = () => {
+    resetCountDown();
     level = INIT_LEVEL;
     score = INIT_SCORE;
     progress = INIT_PROGRESS;
@@ -69,45 +73,46 @@ const init = () => {
     reset();
     setMetaInfo();
     generateEquation();
+    countDown();
 }
 
 const doWhenCorrect = () => {
     level += LEVEL_STEP;
     score += SCORE_STEP;
-    progress = (level / (100 / PROGRESS_STEP)) * 100 % 100;
-    if (0 === progress) progress = 100;
     setMetaInfo();
 }
 
 const doWhenIncorrect = () => {
-    alert('Game Over! Play new Game?');
+    alert(`Game Over! Your Score: ${score} Play new Game?`);
     init();
 }
 
 const setMetaInfo = () => {
     setLevel(level);
     setScore(score);
-    setProgress(progress);
 }
 
 const isAnswerCorrect = (value) => {
     return value === (answer === result);
 }
 
-btnAgreeEl.addEventListener('click', (e) => {
-    if (isAnswerCorrect(true)) {
+const doCheckAnswer = (choice) => {
+    if (isAnswerCorrect(choice)) {
         doWhenCorrect();
         generateEquation();
+        resetCountDown();
+        countDown();
     } else {
         doWhenIncorrect();
     }
+}
+
+btnAgreeEl.addEventListener('click', (e) => {
+    userChoice = true;
+    doCheckAnswer(userChoice);
 });
 
 btnDisAgreeEl.addEventListener('click', (e) => {
-    if (isAnswerCorrect(false)) {
-        doWhenCorrect();
-        generateEquation();
-    } else {
-        doWhenIncorrect();
-    }
+    userChoice = false;
+    doCheckAnswer(userChoice);
 });
